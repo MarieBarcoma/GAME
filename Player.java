@@ -48,4 +48,10 @@ public class Player {
     public void setProgress(int progress) { 
         this.progress = progress; 
     }
+    
+    /** Reset player progress (useful for restarting the game). */
+    public void reset(){
+        this.progress = 0;
+    }
+
 }
