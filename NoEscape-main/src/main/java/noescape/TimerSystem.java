@@ -1,31 +1,4 @@
-<<<<<<< HEAD
 package noescape;
-
-public class TimerSystem {
-
-    private long startTime;
-    private int timeLimit;  // total seconds allowed
-    private boolean running;
-
-    public TimerSystem(int timeLimitInSeconds) {
-        this.timeLimit = timeLimitInSeconds;
-        this.running = false;
-    }
-
-    public void start() {
-        this.startTime = System.currentTimeMillis();
-        this.running = true;
-    }
-
-    public void stop() {
-        this.running = false;
-    }
-
-    public boolean hasTimeExpired() {
-        return running && getSecondsRemaining() <= 0;
-    }
-
-=======
 public class TimerSystem {
  
     private long startTime;
@@ -46,19 +19,12 @@ public class TimerSystem {
         return running && getSecondsRemaining() <= 0;
     }
  
->>>>>>> c3e02708c9d42df23cec62226de306e4e171b963
     public int getSecondsRemaining() {
         long elapsed = (System.currentTimeMillis() - startTime) / 1000;
         return (int) Math.max(0, timeLimit - elapsed);
     }
-<<<<<<< HEAD
-
-    public boolean isRunning() { 
-        return running; 
-=======
  
     public boolean isRunning() {
          return running; 
->>>>>>> c3e02708c9d42df23cec62226de306e4e171b963
     }
 }
