@@ -4,11 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * OOP:
- *   Inheritance  — extends BasePanel (which extends JPanel)
- *   Abstraction  — implements buildContent() defined in BasePanel
- */
 public class LoopPanel extends BasePanel {
     private final Player player;
     private final String controllerMessage;
@@ -18,44 +13,49 @@ public class LoopPanel extends BasePanel {
         this.player = player;
         this.controllerMessage = controllerMessage;
         this.onTryAgain = onTryAgain;
-        buildContent();
+        initializeContent();
     }
 
     @Override
-    protected void buildContent() {
+    protected void initializeContent() {
         setLayout(new GridBagLayout());
 
-        JPanel innerPanel = new JPanel();
-        innerPanel.setOpaque(false);
-        innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+        JPanel inner = new JPanel();
+        inner.setOpaque(false);
+        inner.setLayout(new BoxLayout(inner, BoxLayout.Y_AXIS));
 
-        innerPanel.add(createTitleLabel("💀  YOU FAILED!", GameWindow.COLOR_RED, 28));
-        innerPanel.add(Box.createVerticalStrut(20));
-        innerPanel.add(createCenteredLabel("Time ran out,  " + player.getName() + ".", GameWindow.COLOR_TEXT, 15, Font.PLAIN));
-        innerPanel.add(Box.createVerticalStrut(6));
-        innerPanel.add(createCenteredLabel("Better luck next time.", GameWindow.COLOR_TEXT, 14, Font.PLAIN));
-        innerPanel.add(Box.createVerticalStrut(24));
-        innerPanel.add(createHorizontalDivider());
-        innerPanel.add(Box.createVerticalStrut(14));
-        innerPanel.add(createCenteredLabel("[ " + controllerMessage + " ]", GameWindow.COLOR_DIMMED, 12, Font.ITALIC));
-        innerPanel.add(Box.createVerticalStrut(14));
-        innerPanel.add(createHorizontalDivider());
-        innerPanel.add(Box.createVerticalStrut(20));
+        int w = getResponsiveWidth();
+        inner.setPreferredSize(new Dimension(w, 500));
+        inner.setMaximumSize(new Dimension(w, 500));
+
+        inner.add(createTitleLabel("💀  YOU FAILED!", GameWindow.COLOR_RED, 30));
+        inner.add(Box.createVerticalStrut(22));
+        inner.add(createCenteredLabel("Time ran out,  " + player.getName() + ".", GameWindow.COLOR_TEXT, 16, Font.PLAIN));
+        inner.add(Box.createVerticalStrut(8));
+        inner.add(createCenteredLabel("Better luck next time.", GameWindow.COLOR_TEXT, 15, Font.PLAIN));
+        inner.add(Box.createVerticalStrut(28));
+        inner.add(createHorizontalDivider());
+        inner.add(Box.createVerticalStrut(16));
+
+        if (controllerMessage != null && !controllerMessage.isBlank()) {
+            inner.add(createCenteredLabel("[ " + controllerMessage + " ]", GameWindow.COLOR_DIMMED, 13, Font.ITALIC));
+            inner.add(Box.createVerticalStrut(16));
+        }
+
+        inner.add(createHorizontalDivider());
+        inner.add(Box.createVerticalStrut(24));
 
         JButton tryAgainButton = createLargeCourseButton(
-            "🔄   TRY AGAIN", "Restart the loop", GameWindow.COLOR_YELLOW, onTryAgain
-        );
-        tryAgainButton.setMaximumSize(new Dimension(320, 70));
-        innerPanel.add(tryAgainButton);
-        innerPanel.add(Box.createVerticalStrut(12));
+                "🔄   TRY AGAIN", "Restart the loop", GameWindow.COLOR_YELLOW, onTryAgain);
+        tryAgainButton.setMaximumSize(new Dimension(360, 80));
+        inner.add(tryAgainButton);
+        inner.add(Box.createVerticalStrut(14));
 
         JButton exitButton = createLargeCourseButton(
-            "✖   EXIT GAME", "Close the application", GameWindow.COLOR_RED,
-            event -> System.exit(0)
-        );
-        exitButton.setMaximumSize(new Dimension(320, 70));
-        innerPanel.add(exitButton);
+                "✖   EXIT GAME", "Close the application", GameWindow.COLOR_RED, event -> System.exit(0));
+        exitButton.setMaximumSize(new Dimension(360, 80));
+        inner.add(exitButton);
 
-        add(innerPanel);
+        add(inner);
     }
 }

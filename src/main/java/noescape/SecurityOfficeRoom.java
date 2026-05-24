@@ -1,10 +1,5 @@
 package noescape;
 
-/**
- * OOP:
- *   Inheritance  — extends BaseRoom (shares name, lock, attempt tracking)
- *   Polymorphism — showHint() has a side-effect (re-locking) unique to this room
- */
 public class SecurityOfficeRoom extends BaseRoom {
     private boolean hintPenaltyTriggered = false;
 
@@ -19,9 +14,9 @@ public class SecurityOfficeRoom extends BaseRoom {
 
     @Override
     public void showHint() {
-        hintPenaltyTriggered = true;
+        hintPenaltyTriggered = true;   // triggers re-lock
         unlock();
-        lastMessage = "⚠ SECURITY ALERT! Hint request flagged. " + "Lockdown initiated — room re-locked! " + "HINT: " + hintText;
+        lastMessage = "⚠ SECURITY ALERT! Hint request flagged. " + "Lockdown initiated — room re-locked!  " + "HINT: " + hintText;
     }
 
     @Override
@@ -42,12 +37,10 @@ public class SecurityOfficeRoom extends BaseRoom {
             lastMessage = "Correct! You cleared: " + getName();
         } else {
             attemptCount++;
-            lastMessage = "Wrong answer. Attempt " + attemptCount + " used.";
+            lastMessage = "Incorrect answer. You've got this.";
         }
     }
 
     @Override
-    public String getRoomType() { 
-        return "Security Office"; 
-    }
+    public String getRoomType() { return "Security Office"; }
 }

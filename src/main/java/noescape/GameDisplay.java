@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * OOP: Encapsulation — {@code Game} never accesses {@code GameWindow} screens directly.
- */
 public class GameDisplay {
     private final JLabel timerLabel;
     private final GameWindow gameWindow;

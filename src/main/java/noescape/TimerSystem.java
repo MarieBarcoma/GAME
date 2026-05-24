@@ -1,9 +1,5 @@
 package noescape;
 
-/**
- * OOP: Encapsulation — timer state is fully hidden; only elapsed/remaining
- *      time and lifecycle methods are exposed publicly.
- */
 public class TimerSystem {
     private long startTimeMillis;
     private final int timeLimitSeconds;

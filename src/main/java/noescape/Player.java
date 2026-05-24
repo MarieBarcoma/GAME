@@ -1,8 +1,5 @@
 package noescape;
 
-/**
- * OOP: Encapsulation — all fields are private; state is exposed through getters/setters only.
- */
 public class Player {
     private final String name;
     private final String course;

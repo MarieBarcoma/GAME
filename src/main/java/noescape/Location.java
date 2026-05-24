@@ -1,8 +1,5 @@
 package noescape;
 
-/**
- * OOP: Encapsulation — building metadata is wrapped alongside a room reference.
- */
 public class Location {
     private final String buildingName;
     private final Escapable room;

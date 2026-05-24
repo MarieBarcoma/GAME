@@ -4,124 +4,181 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 
-/**
- * OOP:
- *   Inheritance  — extends BasePanel (which extends JPanel)
- *   Abstraction  — implements buildContent() defined in BasePanel
- *   Polymorphism — room.showPuzzle() / room.isLocked() behave differently
- *                  per room type (Classroom, LibraryRoom, TsgRoom, SecurityOfficeRoom)
- */
 public class RoomPanel extends BasePanel {
     private final Escapable room;
+    private final int roomIndex;
+    private final int totalRooms;
+    private final Player player;
     private final String controllerMessage;
     private final Escapable[] allRooms;
     private final int activeRoomIndex;
 
+    private JLabel attemptsLabel;
+
     public RoomPanel(Escapable room, int roomIndex, int totalRooms, Player player, String controllerMessage, Escapable[] allRooms, int activeRoomIndex) {
         this.room = room;
+        this.roomIndex = roomIndex;
+        this.totalRooms = totalRooms;
+        this.player = player;
         this.controllerMessage = controllerMessage;
         this.allRooms = allRooms;
         this.activeRoomIndex = activeRoomIndex;
-        buildContent();
+        initializeContent();
+    }
+
+    public void refreshAttempts() {
+        if (attemptsLabel == null) return;
+        int used = room.getAttempts();
+        int max = player.getMaxAttempts();
+        attemptsLabel.setText("Attempts used:  " + used + " / " + max);
+        attemptsLabel.setForeground(
+            used == 0 ? GameWindow.COLOR_GREEN
+          : used >= max - 1 ? GameWindow.COLOR_RED
+          : GameWindow.COLOR_YELLOW
+        );
     }
 
     @Override
-    protected void buildContent() {
-        setLayout(new BorderLayout(0, 14));
+    protected void initializeContent() {
+        setLayout(new BorderLayout());
 
         JPanel topSection = new JPanel();
         topSection.setOpaque(false);
         topSection.setLayout(new BoxLayout(topSection, BoxLayout.Y_AXIS));
+        topSection.setBorder(new EmptyBorder(30, 60, 16, 60));
 
-        topSection.add(createTitleLabel(room.getName(), GameWindow.COLOR_PURPLE, 20));
+        JLabel roomNameLabel = new JLabel(room.getName(), SwingConstants.CENTER);
+        roomNameLabel.setFont(new Font("Consolas", Font.BOLD, 36));
+        roomNameLabel.setForeground(GameWindow.COLOR_CYAN);
+        roomNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel roomTypeLabel = new JLabel(
+            "Room " + (roomIndex + 1) + " of " + totalRooms
+            + "   ·   " + room.getRoomType()
+            + "   ·   " + player.getMaxAttempts() + " attempts allowed",
+            SwingConstants.CENTER);
+        roomTypeLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
+        roomTypeLabel.setForeground(GameWindow.COLOR_DIMMED);
+        roomTypeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        topSection.add(roomNameLabel);
+        topSection.add(Box.createVerticalStrut(8));
+        topSection.add(roomTypeLabel);
         topSection.add(Box.createVerticalStrut(16));
+        topSection.add(createHorizontalDivider());
 
-        if (room.isLocked()) {
-            topSection.add(createCenteredLabel("🔒  This room is locked.", GameWindow.COLOR_RED, 15, Font.BOLD));
-            topSection.add(Box.createVerticalStrut(8));
-            topSection.add(createCenteredLabel("Solve the previous room first.", GameWindow.COLOR_DIMMED, 13, Font.PLAIN));
-        } else {
-            topSection.add(buildPuzzleBox());
-            topSection.add(Box.createVerticalStrut(14));
-            topSection.add(createCenteredLabel("Type your answer below and press  Submit.", GameWindow.COLOR_DIMMED, 13, Font.PLAIN));
-            topSection.add(Box.createVerticalStrut(4));
-            topSection.add(createCenteredLabel("Use the  Clue  or  Hint  buttons if stuck.", GameWindow.COLOR_DIMMED, 12, Font.PLAIN));
-        }
+        JPanel midSection = new JPanel(new GridBagLayout());
+        midSection.setOpaque(false);
+        midSection.setBorder(new EmptyBorder(0, 80, 0, 80));
 
-        JPanel bottomSection = new JPanel();
-        bottomSection.setOpaque(false);
-        bottomSection.setLayout(new BoxLayout(bottomSection, BoxLayout.Y_AXIS));
-        bottomSection.add(createHorizontalDivider());
-        bottomSection.add(Box.createVerticalStrut(8));
-        bottomSection.add(createCenteredLabel("[ " + controllerMessage + " ]", GameWindow.COLOR_DIMMED, 12, Font.ITALIC));
-        bottomSection.add(Box.createVerticalStrut(10));
-        bottomSection.add(buildRoomProgressMap());
+        JPanel midContent = new JPanel();
+        midContent.setOpaque(false);
+        midContent.setLayout(new BoxLayout(midContent, BoxLayout.Y_AXIS));
 
-        add(topSection, BorderLayout.CENTER);
-        add(bottomSection, BorderLayout.SOUTH);
-    }
+        midContent.add(Box.createVerticalStrut(30));
 
-    private JPanel buildPuzzleBox() {
         JPanel puzzleBox = new JPanel();
+        puzzleBox.setLayout(new BoxLayout(puzzleBox, BoxLayout.Y_AXIS));
+        puzzleBox.setBackground(new Color(30, 20, 50, 220));
         puzzleBox.setOpaque(true);
-        puzzleBox.setBackground(new Color(30, 20, 55));
         puzzleBox.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(GameWindow.COLOR_PURPLE, 1, true),
-            new EmptyBorder(14, 24, 14, 24)
+            new EmptyBorder(20, 30, 20, 30)
         ));
-        puzzleBox.setLayout(new BoxLayout(puzzleBox, BoxLayout.Y_AXIS));
+        puzzleBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
 
-        room.showPuzzle();
-        String puzzleText = room.getLastMessage().replace("PUZZLE: ", "");
+        JLabel puzzleTag = new JLabel("📝  PUZZLE", SwingConstants.CENTER);
+        puzzleTag.setFont(new Font("Consolas", Font.BOLD, 13));
+        puzzleTag.setForeground(GameWindow.COLOR_YELLOW);
+        puzzleTag.setAlignmentX(Component.CENTER_ALIGNMENT);
+        puzzleBox.add(puzzleTag);
+        puzzleBox.add(Box.createVerticalStrut(12));
 
-        puzzleBox.add(createCenteredLabel("📝  PUZZLE", GameWindow.COLOR_YELLOW, 13, Font.BOLD));
-        puzzleBox.add(Box.createVerticalStrut(10));
-
-        for (String line : wrapTextToLines(puzzleText, 55)) {
-            puzzleBox.add(createCenteredLabel(line, GameWindow.COLOR_TEXT, 14, Font.PLAIN));
+        for (String line : wrapTextToLines(room.getPuzzle(), 65)) {
+            JLabel l = new JLabel(line, SwingConstants.CENTER);
+            l.setFont(new Font("Calibri", Font.PLAIN, 18));
+            l.setForeground(GameWindow.COLOR_TEXT);
+            l.setAlignmentX(Component.CENTER_ALIGNMENT);
+            puzzleBox.add(l);
+            puzzleBox.add(Box.createVerticalStrut(4));
         }
+        midContent.add(puzzleBox);
+        midContent.add(Box.createVerticalStrut(22));
 
-        JPanel puzzleWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        puzzleWrapper.setOpaque(false);
-        puzzleBox.setMaximumSize(new Dimension(560, 120));
-        puzzleWrapper.add(puzzleBox);
-        return puzzleWrapper;
-    }
+        int used = room.getAttempts();
+        int max  = player.getMaxAttempts();
+        attemptsLabel = new JLabel("Attempts used:  " + used + " / " + max, SwingConstants.CENTER);
+        attemptsLabel.setName("attemptsLabel");   // tag for GameWindow lookup
+        attemptsLabel.setFont(new Font("Consolas", Font.BOLD, 15));
+        attemptsLabel.setForeground(
+            used == 0 ? GameWindow.COLOR_GREEN
+          : used >= max - 1 ? GameWindow.COLOR_RED
+          : GameWindow.COLOR_YELLOW
+        );
+        attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        midContent.add(attemptsLabel);
+        midContent.add(Box.createVerticalStrut(14));
 
-    private JPanel buildRoomProgressMap() {
-        JPanel mapPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        mapPanel.setOpaque(false);
+        JLabel instrLabel = new JLabel("Type your answer below and press  Submit.", SwingConstants.CENTER);
+        instrLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
+        instrLabel.setForeground(GameWindow.COLOR_DIMMED);
+        instrLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        midContent.add(instrLabel);
+        midContent.add(Box.createVerticalStrut(6));
 
-        for (int i = 0; i < allRooms.length; i++) {
-            Color chipColor;
-            String statusIcon;
+        JLabel clueHint = new JLabel("Use the  Clue  or  Hint  buttons if stuck.", SwingConstants.CENTER);
+        clueHint.setFont(new Font("Calibri", Font.PLAIN, 14));
+        clueHint.setForeground(GameWindow.COLOR_DIMMED);
+        clueHint.setAlignmentX(Component.CENTER_ALIGNMENT);
+        midContent.add(clueHint);
 
-            if (allRooms[i].isSolved()) {
-                chipColor  = GameWindow.COLOR_GREEN;  statusIcon = "✓";
-            } else if (i == activeRoomIndex) {
-                chipColor  = GameWindow.COLOR_PURPLE; statusIcon = "►";
-            } else if (allRooms[i].isLocked()) {
-                chipColor  = GameWindow.COLOR_DIMMED; statusIcon = "🔒";
-            } else {
-                chipColor  = GameWindow.COLOR_YELLOW; statusIcon = " ";
+        if (controllerMessage != null && !controllerMessage.isBlank()) {
+            midContent.add(Box.createVerticalStrut(20));
+            midContent.add(createHorizontalDivider());
+            midContent.add(Box.createVerticalStrut(14));
+            Color msgColor = controllerMessage.contains("Correct") ? GameWindow.COLOR_GREEN
+                           : controllerMessage.contains("CLUE") || controllerMessage.contains("HINT") ? GameWindow.COLOR_CYAN
+                           : controllerMessage.contains("locked") ? GameWindow.COLOR_RED
+                           : GameWindow.COLOR_ORANGE;
+            for (String line : wrapTextToLines(controllerMessage, 70)) {
+                JLabel ml = new JLabel("[ " + line + " ]", SwingConstants.CENTER);
+                ml.setFont(new Font("Calibri", Font.ITALIC, 15));
+                ml.setForeground(msgColor);
+                ml.setAlignmentX(Component.CENTER_ALIGNMENT);
+                midContent.add(ml);
+                midContent.add(Box.createVerticalStrut(4));
             }
-
-            JPanel chip = new JPanel();
-            chip.setOpaque(true);
-            chip.setBackground(new Color(chipColor.getRed(), chipColor.getGreen(), chipColor.getBlue(), 30));
-            chip.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(chipColor, 1, true),
-                new EmptyBorder(5, 10, 5, 10)
-            ));
-            chip.setLayout(new BoxLayout(chip, BoxLayout.Y_AXIS));
-
-            JLabel nameLabel = new JLabel(statusIcon + "  " + allRooms[i].getName(), SwingConstants.CENTER);
-            nameLabel.setFont(new Font("Consolas", Font.BOLD, 11));
-            nameLabel.setForeground(chipColor);
-            nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            chip.add(nameLabel);
-            mapPanel.add(chip);
         }
-        return mapPanel;
+
+        midSection.add(midContent);
+
+        JPanel bottomSection = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        bottomSection.setOpaque(false);
+        bottomSection.setBorder(new EmptyBorder(10, 0, 24, 0));
+
+        if (allRooms != null) {
+            for (int i = 0; i < allRooms.length; i++) {
+                Escapable r = allRooms[i];
+                boolean active = (i == activeRoomIndex);
+                boolean solved = r.isSolved();
+                boolean locked = r.isLocked();
+
+                String icon = solved ? "✓ " : locked ? "🔒 " : active ? "▶ " : "○ ";
+                Color  col  = solved ? GameWindow.COLOR_GREEN : active ? GameWindow.COLOR_CYAN : locked ? GameWindow.COLOR_DIMMED : GameWindow.COLOR_TEXT;
+
+                JLabel nav = new JLabel(icon + r.getName(), SwingConstants.CENTER);
+                nav.setFont(new Font("Consolas", Font.PLAIN, 13));
+                nav.setForeground(col);
+                nav.setBorder(BorderFactory.createCompoundBorder(
+                    new LineBorder(col, 1, true),
+                    new EmptyBorder(6, 14, 6, 14)
+                ));
+                bottomSection.add(nav);
+            }
+        }
+
+        add(topSection, BorderLayout.NORTH);
+        add(midSection, BorderLayout.CENTER);
+        add(bottomSection, BorderLayout.SOUTH);
     }
 }

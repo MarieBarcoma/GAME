@@ -6,9 +6,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * OOP: Encapsulation — file I/O and parse logic are hidden inside this class.
- */
 public class EnvironmentLoader {
     private final Map<String, String> configValues = new HashMap<>();
 

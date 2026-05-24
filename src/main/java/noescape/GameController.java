@@ -1,10 +1,6 @@
 package noescape;
 
-/**
- * OOP: Encapsulation — internal state hidden behind a clean public API.
- */
 public class GameController {
-
     private String currentMessage;
     private boolean isLoopOverridden;
 

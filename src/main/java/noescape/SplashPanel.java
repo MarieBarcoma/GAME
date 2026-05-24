@@ -3,9 +3,6 @@ package noescape;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * OOP: Inheritance — extends JPanel and overrides {@code paintComponent()}.
- */
 public class SplashPanel extends JPanel {
     private static final int PANEL_WIDTH = 560;
     private static final int PANEL_HEIGHT = 340;

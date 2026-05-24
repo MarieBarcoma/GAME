@@ -5,14 +5,10 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * OOP:
- *   Inheritance   — extends JFrame
- *   Encapsulation — private fields, public API only
- */
 public class GameWindow extends JFrame {
-    public static final Color COLOR_BACKGROUND_DARK  = new Color(13, 13, 23);
-    public static final Color COLOR_BACKGROUND_CARD  = new Color(22, 22, 40);
+
+    public static final Color COLOR_BACKGROUND_DARK = new Color(13, 13, 23);
+    public static final Color COLOR_BACKGROUND_CARD = new Color(22, 22, 40);
     public static final Color COLOR_BACKGROUND_INPUT = new Color(18, 18, 32);
     public static final Color COLOR_PURPLE = new Color(160, 80, 220);
     public static final Color COLOR_CYAN = new Color(60, 200, 220);
@@ -26,11 +22,13 @@ public class GameWindow extends JFrame {
 
     private JLabel timerLabel;
     private JLabel roomInfoLabel;
-    private JPanel  contentCardPanel;
+    private JPanel contentCardPanel;
     private JTextField inputField;
     private JButton submitButton;
     private JButton clueButton;
     private JButton hintButton;
+    private JLabel feedbackLabel;
+    private JPanel feedbackRow;
 
     public GameWindow() {
         buildWindow();
@@ -38,81 +36,97 @@ public class GameWindow extends JFrame {
 
     private void buildWindow() {
         setTitle("NO ESCAPE");
-        setSize(860, 640);
-        setMinimumSize(new Dimension(720, 520));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(COLOR_BACKGROUND_DARK);
-        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setMinimumSize(new Dimension(900, 600));
 
         add(buildHeaderPanel(), BorderLayout.NORTH);
-        add(buildContentArea(), BorderLayout.CENTER);
+        add(initializeContentArea(), BorderLayout.CENTER);
         add(buildFooterPanel(), BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
     private JPanel buildHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(new Color(8, 8, 18));
-        headerPanel.setBorder(new MatteBorder(0, 0, 2, 0, COLOR_PURPLE));
-        headerPanel.setPreferredSize(new Dimension(0, 54));
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(new Color(8, 8, 18));
+        header.setBorder(new MatteBorder(0, 0, 2, 0, COLOR_PURPLE));
+        header.setPreferredSize(new Dimension(0, 56));
 
         roomInfoLabel = new JLabel("", SwingConstants.CENTER);
-        roomInfoLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+        roomInfoLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         roomInfoLabel.setForeground(COLOR_DIMMED);
 
         timerLabel = new JLabel("", SwingConstants.RIGHT);
-        timerLabel.setFont(new Font("Consolas", Font.BOLD, 17));
+        timerLabel.setFont(new Font("Consolas", Font.BOLD, 22));
         timerLabel.setForeground(COLOR_YELLOW);
-        timerLabel.setBorder(new EmptyBorder(0, 0, 0, 18));
+        timerLabel.setBorder(new EmptyBorder(0, 0, 0, 22));
 
-        headerPanel.add(roomInfoLabel, BorderLayout.CENTER);
-        headerPanel.add(timerLabel, BorderLayout.EAST);
-        return headerPanel;
+        header.add(roomInfoLabel, BorderLayout.CENTER);
+        header.add(timerLabel, BorderLayout.EAST);
+        return header;
     }
 
-    private JPanel buildContentArea() {
+    private JPanel initializeContentArea() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(COLOR_BACKGROUND_DARK);
+        wrapper.setBorder(new EmptyBorder(8, 16, 6, 16));
+
         contentCardPanel = new JPanel(new BorderLayout());
         contentCardPanel.setBackground(COLOR_BACKGROUND_DARK);
-        contentCardPanel.setBorder(new EmptyBorder(18, 28, 10, 28));
-        return contentCardPanel;
+
+        feedbackLabel = new JLabel("", SwingConstants.CENTER);
+        feedbackLabel.setFont(new Font("Consolas", Font.BOLD, 15));
+        feedbackLabel.setForeground(COLOR_RED);
+
+        feedbackRow = new JPanel(new BorderLayout());
+        feedbackRow.setBackground(new Color(40, 10, 10));
+        feedbackRow.setBorder(new EmptyBorder(10, 24, 10, 24));
+        feedbackRow.add(feedbackLabel, BorderLayout.CENTER);
+        feedbackRow.setVisible(false);
+
+        wrapper.add(contentCardPanel, BorderLayout.CENTER);
+        wrapper.add(feedbackRow, BorderLayout.SOUTH);
+        return wrapper;
     }
 
     private JPanel buildFooterPanel() {
-        JPanel footerPanel = new JPanel(new BorderLayout(8, 0));
-        footerPanel.setBackground(COLOR_BACKGROUND_DARK);
-        footerPanel.setBorder(new CompoundBorder(
+        JPanel footer = new JPanel(new BorderLayout(8, 0));
+        footer.setBackground(COLOR_BACKGROUND_DARK);
+        footer.setBorder(new CompoundBorder(
             new MatteBorder(2, 0, 0, 0, COLOR_BORDER),
-            new EmptyBorder(10, 28, 14, 28)
+            new EmptyBorder(10, 24, 14, 24)
         ));
 
         inputField = new JTextField();
-        inputField.setFont(new Font("Consolas", Font.PLAIN, 15));
+        inputField.setFont(new Font("Consolas", Font.PLAIN, 16));
         inputField.setBackground(COLOR_BACKGROUND_INPUT);
         inputField.setForeground(COLOR_TEXT);
         inputField.setCaretColor(COLOR_PURPLE);
         inputField.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(COLOR_PURPLE, 1, true),
-            new EmptyBorder(7, 14, 7, 14)
+            new EmptyBorder(8, 16, 8, 16)
         ));
 
-        submitButton = createActionButton("Submit", COLOR_GREEN);
-        clueButton = createActionButton("Clue", COLOR_CYAN);
-        hintButton = createActionButton("Hint", COLOR_YELLOW);
+        submitButton = createFooterButton("Submit", COLOR_GREEN);
+        clueButton = createFooterButton("Clue", COLOR_CYAN);
+        hintButton = createFooterButton("Hint", COLOR_YELLOW);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
-        buttonPanel.setBackground(COLOR_BACKGROUND_DARK);
-        buttonPanel.add(clueButton);
-        buttonPanel.add(hintButton);
-        buttonPanel.add(submitButton);
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        btnPanel.setBackground(COLOR_BACKGROUND_DARK);
+        btnPanel.add(clueButton);
+        btnPanel.add(hintButton);
+        btnPanel.add(submitButton);
 
-        footerPanel.add(inputField,  BorderLayout.CENTER);
-        footerPanel.add(buttonPanel, BorderLayout.EAST);
-        return footerPanel;
+        footer.add(inputField, BorderLayout.CENTER);
+        footer.add(btnPanel, BorderLayout.EAST);
+        return footer;
     }
 
     private void swapContentPanel(JPanel newPanel) {
+        feedbackRow.setVisible(false);   // hide old feedback on every screen change
         contentCardPanel.removeAll();
         contentCardPanel.add(newPanel, BorderLayout.CENTER);
         contentCardPanel.revalidate();
@@ -121,86 +135,116 @@ public class GameWindow extends JFrame {
 
     public void showEnterNameScreen() {
         roomInfoLabel.setText("");
+        submitButton.setVisible(true);
+        clueButton.setVisible(false);
+        hintButton.setVisible(false);
+        inputField.setEnabled(true);
         swapContentPanel(new NameEntryPanel());
     }
 
-    public void showChooseCourseScreen(String playerName, ActionListener onComputerScienceSelected, ActionListener onNursingSelected) {
+    public void showChooseCourseScreen(String playerName, ActionListener onCS, ActionListener onNursing) {
         roomInfoLabel.setText("Choose Your Course");
-        swapContentPanel(new CourseSelectPanel(playerName, onComputerScienceSelected, onNursingSelected));
+        submitButton.setVisible(false);
+        clueButton.setVisible(false);
+        hintButton.setVisible(false);
+        inputField.setEnabled(false);
+        swapContentPanel(new CourseSelectPanel(playerName, onCS, onNursing));
     }
 
     public void showSplashScreen(Player player) {
         roomInfoLabel.setText("Ready to Play");
+        submitButton.setVisible(true);
+        clueButton.setVisible(false);
+        hintButton.setVisible(false);
+        inputField.setEnabled(true);
         swapContentPanel(new ReadyPanel(player, inputField, submitButton));
     }
 
     public void showRoomScreen(Escapable room, int roomIndex, int totalRooms, Player player, String controllerMessage, Escapable[] allRooms, int activeRoomIndex) {
-        roomInfoLabel.setText("Room " + (roomIndex + 1) + " of " + totalRooms + "  —  " + room.getName());
+        roomInfoLabel.setText(
+            "Room " + (roomIndex + 1) + " of " + totalRooms
+            + "  —  " + room.getName());
+        submitButton.setVisible(true);
+        clueButton.setVisible(true);
+        hintButton.setVisible(true);
+        inputField.setEnabled(true);
         swapContentPanel(new RoomPanel(room, roomIndex, totalRooms, player, controllerMessage, allRooms, activeRoomIndex));
     }
 
     public void showWinScreen(Player player, int secondsRemaining, String controllerMessage) {
         roomInfoLabel.setText("YOU ESCAPED!");
+        submitButton.setVisible(false);
+        clueButton.setVisible(false);
+        hintButton.setVisible(false);
         swapContentPanel(new WinPanel(player, secondsRemaining, controllerMessage,
-            event -> { inputField.setText("restart"); submitButton.doClick(); }));
+            e -> {
+                inputField.setText("restart");
+                submitButton.setVisible(true);
+                submitButton.doClick();
+            }));
     }
 
     public void showLoopScreen(Player player, String controllerMessage) {
         roomInfoLabel.setText("You Failed!");
+        submitButton.setVisible(false);
+        clueButton.setVisible(false);
+        hintButton.setVisible(false);
         swapContentPanel(new LoopPanel(player, controllerMessage,
-            event -> { inputField.setText("restart"); submitButton.doClick(); }));
+            e -> {
+                inputField.setText("restart");
+                submitButton.setVisible(true);
+                submitButton.doClick();
+            }));
     }
 
-    public void showFeedback(String feedbackMessage, Color textColor) {
-        Component[] components = contentCardPanel.getComponents();
-        if (components.length > 0 && components[0] instanceof JPanel) {
-            JPanel cardPanel = (JPanel) components[0];
-            Component lastComponent = cardPanel.getComponent(cardPanel.getComponentCount() - 1);
-
-            if (lastComponent instanceof JLabel
-                && ((JLabel) lastComponent).getName() != null
-                && ((JLabel) lastComponent).getName().equals("feedback")) {
-                cardPanel.remove(lastComponent);
-            }
-
-            JLabel feedbackLabel = new JLabel(feedbackMessage, SwingConstants.CENTER);
-            feedbackLabel.setName("feedback");
-            feedbackLabel.setFont(new Font("Consolas", Font.BOLD, 13));
-            feedbackLabel.setForeground(textColor);
-            feedbackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            cardPanel.add(feedbackLabel);
-            cardPanel.revalidate();
-            cardPanel.repaint();
+    public void showFeedback(String message, Color textColor) {
+        if (message == null || message.isBlank()) {
+            feedbackRow.setVisible(false);
+            return;
         }
+
+        if (contentCardPanel.getComponentCount() > 0) {
+            java.awt.Component c = contentCardPanel.getComponent(0);
+            if (c instanceof RoomPanel) {
+                ((RoomPanel) c).refreshAttempts();
+            }
+        }
+
+        feedbackLabel.setText(message);
+        feedbackLabel.setForeground(textColor);
+
+        int r = Math.min(255, 10 + textColor.getRed() / 10);
+        int g = Math.min(255, 10 + textColor.getGreen() / 10);
+        int b = Math.min(255, 10 + textColor.getBlue() / 10);
+        feedbackRow.setBackground(new Color(r, g, b));
+        feedbackRow.setVisible(true);
+        feedbackRow.revalidate();
+        feedbackRow.repaint();
     }
 
-    private JButton createActionButton(String labelText, Color accentColor) {
-        JButton button = new JButton(labelText) {
+    private JButton createFooterButton(String text, Color accent) {
+        JButton btn = new JButton(text) {
             @Override
-            protected void paintComponent(Graphics graphics) {
-                Graphics2D graphics2D = (Graphics2D) graphics.create();
-                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color fillColor = getModel().isRollover()
-                    ? new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 60)
-                    : new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 25);
-                graphics2D.setColor(fillColor);
-                graphics2D.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
-                graphics2D.dispose();
-                super.paintComponent(graphics);
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(accent.getRed(), accent.getGreen(), accent.getBlue(), getModel().isRollover() ? 60 : 25));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
             }
         };
-        button.setFont(new Font("Consolas", Font.BOLD, 13));
-        button.setForeground(accentColor);
-        button.setContentAreaFilled(false);
-        button.setOpaque(false);
-        button.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(accentColor, 1, true),
-            new EmptyBorder(7, 18, 7, 18)
+        btn.setFont(new Font("Consolas", Font.BOLD, 14));
+        btn.setForeground(accent);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(accent, 1, true),
+            new EmptyBorder(8, 20, 8, 20)
         ));
-        button.setFocusPainted(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        return button;
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
     }
 
     public void attachListeners(ActionListener onSubmit, ActionListener onClue, ActionListener onHint) {
@@ -210,33 +254,25 @@ public class GameWindow extends JFrame {
         hintButton.addActionListener(onHint);
     }
 
-    public void setInputEnabled(boolean isEnabled) {
-        submitButton.setEnabled(isEnabled);
-        clueButton.setEnabled(isEnabled);
-        hintButton.setEnabled(isEnabled);
-        inputField.setEnabled(isEnabled);
+    public void setInputEnabled(boolean enabled) {
+        submitButton.setEnabled(enabled);
+        clueButton.setEnabled(enabled);
+        hintButton.setEnabled(enabled);
+        inputField.setEnabled(enabled);
     }
 
-    public void setClueHintVisible(boolean isVisible) {
-        clueButton.setVisible(isVisible);
-        hintButton.setVisible(isVisible);
+    public void setClueHintVisible(boolean visible) {
+        clueButton.setVisible(visible);
+        hintButton.setVisible(visible);
     }
 
-    public void setRoomInfoLabel(String text) { roomInfoLabel.setText(text); }
+    public void setRoomInfoLabel(String text) { 
+        roomInfoLabel.setText(text); 
+    }
 
-    public JTextField getInputField() { 
-        return inputField;   
-    }
-    public JLabel getTimerLabel() { 
-        return timerLabel;   
-    }
-    public JButton getSubmitButton() { 
-        return submitButton; 
-    }
-    public JButton getClueButton() { 
-        return clueButton;   
-    }
-    public JButton getHintButton() { 
-        return hintButton;   
-    }
+    public JTextField getInputField() { return inputField; }
+    public JLabel getTimerLabel() { return timerLabel; }
+    public JButton getSubmitButton() { return submitButton; }
+    public JButton getClueButton() { return clueButton; }
+    public JButton getHintButton() { return hintButton; }
 }

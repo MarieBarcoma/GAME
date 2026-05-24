@@ -1,12 +1,5 @@
 package noescape;
 
-/**
- * OOP Principles Demonstrated:
- *   Encapsulation - private fields exposed only through controlled methods
- *   Polymorphism  - roomSequence[] stored as Escapable type
- *   Abstraction   - Escapable interface defines the room contract
- *   Inheritance   - SplashPanel extends JPanel
- */
 public class Game {
     private GameWindow gameWindow;
     private GameDisplay gameDisplay;
@@ -25,10 +18,7 @@ public class Game {
         currentState = GameState.ENTER_NAME;
 
         gameWindow = new GameWindow();
-        gameDisplay = new GameDisplay(
-            gameWindow.getTimerLabel(),
-            gameWindow
-        );
+        gameDisplay = new GameDisplay(gameWindow.getTimerLabel(), gameWindow);
 
         gameWindow.attachListeners(
             event -> processPlayerInput(),
@@ -103,7 +93,9 @@ public class Game {
         currentState = GameState.PLAYING;
         countdownTimer.start();
         gameWindow.setClueHintVisible(true);
-        gameController.sendMessage("The loop has begun. Find a way out, " + currentPlayer.getName() + ".");
+        gameController.sendMessage(
+            "The loop has begun. Find a way out, " + currentPlayer.getName() + "."
+        );
         loadRoom(0);
     }
 
@@ -165,7 +157,6 @@ public class Game {
         if (playerInput.matches("[1-4]")) {
             int selectedRoomIndex = Integer.parseInt(playerInput) - 1;
             Escapable selectedRoom = roomSequence[selectedRoomIndex];
-
             if (!selectedRoom.isLocked() || selectedRoom.isSolved()) {
                 loadRoom(selectedRoomIndex);
             } else {
@@ -180,39 +171,50 @@ public class Game {
             gameDisplay.showFeedback("Already solved! Move to the next room.", GameWindow.COLOR_GREEN);
             return;
         }
+
         if (activeRoom.isLocked()) {
             gameDisplay.showFeedback("This room is locked.", GameWindow.COLOR_RED);
-            return;
-        }
-        if (activeRoom.getAttempts() >= currentPlayer.getMaxAttempts()) {
-            gameDisplay.showFeedback("No more attempts. Press Hint for help.", GameWindow.COLOR_RED);
             return;
         }
 
         activeRoom.checkAnswer(playerInput);
 
         if (activeRoom.isSolved()) {
-            gameDisplay.showFeedback("✓  Correct!  " + activeRoom.getLastMessage(), GameWindow.COLOR_GREEN);
-            onRoomSolved();
-        } else {
+            // ✅ Correct
             gameDisplay.showFeedback(
-                "✗  " + activeRoom.getLastMessage() + "  (" + activeRoom.getAttempts() + "/" + currentPlayer.getMaxAttempts() + ")",
+                "✓  Correct!  " + activeRoom.getLastMessage(),
+                GameWindow.COLOR_GREEN
+            );
+            onRoomSolved();
+
+        } else {
+            // ✗ Wrong — show feedback with attempt count
+            gameDisplay.showFeedback(
+                "✗  " + activeRoom.getLastMessage()
+                + "  (" + activeRoom.getAttempts() + "/" + currentPlayer.getMaxAttempts() + ")",
                 GameWindow.COLOR_RED
             );
+
+            if (activeRoom.getAttempts() >= currentPlayer.getMaxAttempts()) {
+                triggerLoopFailed();
+            }
         }
     }
 
     private void onRoomSolved() {
         if (activeRoomIndex + 1 < roomSequence.length) {
             roomSequence[activeRoomIndex + 1].unlock();
-            gameController.sendMessage("Unlocked: " + roomSequence[activeRoomIndex + 1].getName());
+            gameController.sendMessage( "Unlocked: " + roomSequence[activeRoomIndex + 1].getName()
+            );
         }
         currentPlayer.setProgress(currentPlayer.getProgress() + 1);
 
         if (areAllRoomsSolved()) {
             triggerWin();
         } else {
-            javax.swing.Timer delayTimer = new javax.swing.Timer(900, event -> loadRoom(activeRoomIndex + 1));
+            javax.swing.Timer delayTimer = new javax.swing.Timer(
+                900, event -> loadRoom(activeRoomIndex + 1)
+            );
             delayTimer.setRepeats(false);
             delayTimer.start();
         }

@@ -1,11 +1,6 @@
 package noescape;
 
-/**
- * OOP:
- *   Inheritance   — subclasses extend BaseRoom and inherit shared behaviour
- *   Polymorphism  — showClue(), showHint(), checkAnswer() behave differently
- *                   per subclass even when called through a Escapable reference
- */
+
 public abstract class BaseRoom implements Escapable {
     private final String name;
     private boolean isLocked;

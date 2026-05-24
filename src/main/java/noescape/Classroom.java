@@ -1,11 +1,7 @@
 package noescape;
 
-/**
- * OOP:
- *   Inheritance  — extends BaseRoom (shares name, lock, attempt tracking)
- *   Polymorphism — showClue() behaves differently than every other room
- */
 public class Classroom extends BaseRoom {
+
     private static final int ATTEMPTS_REQUIRED_FOR_CLUE = 2;
 
     public Classroom(String name, boolean isLocked, String puzzleQuestion, String correctAnswer, String clueText, String hintText) {
@@ -34,10 +30,12 @@ public class Classroom extends BaseRoom {
             lastMessage = "Correct! You cleared: " + getName();
         } else {
             attemptCount++;
-            lastMessage = "Wrong answer. Attempt " + attemptCount + " used.";
+            lastMessage = "Incorrect answer. You've got this.";
         }
     }
 
     @Override
-    public String getRoomType() { return "Classroom"; }
+    public String getRoomType() { 
+        return "Classroom"; 
+    }
 }

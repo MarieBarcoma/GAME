@@ -7,23 +7,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * OOP:
- *   Inheritance  — extends JPanel; all screen panels extend BasePanel
- *   Abstraction  — declares buildContent() as abstract, forcing each
- *                  subclass to define its own screen layout
- *   Encapsulation — shared helper methods are protected, not public
- */
 public abstract class BasePanel extends JPanel {
     protected BasePanel() {
         setBackground(GameWindow.COLOR_BACKGROUND_CARD);
         setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(GameWindow.COLOR_BORDER, 1, true),
-            new EmptyBorder(28, 32, 28, 32)
+            new EmptyBorder(20, 40, 20, 40)
         ));
     }
 
-    protected abstract void buildContent();
+    protected abstract void initializeContent();
+
+    protected int getResponsiveWidth() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        return Math.min(800, (int) (screen.width * 0.58));
+    }
 
     protected JLabel createCenteredLabel(String text, Color textColor, int fontSize, int fontStyle) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
@@ -60,14 +58,14 @@ public abstract class BasePanel extends JPanel {
         JButton button = new JButton() {
             @Override
             protected void paintComponent(Graphics graphics) {
-                Graphics2D graphics2D = (Graphics2D) graphics.create();
-                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color fillColor = getModel().isRollover()
+                Graphics2D g2 = (Graphics2D) graphics.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Color fill = getModel().isRollover()
                     ? new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 55)
                     : new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 22);
-                graphics2D.setColor(fillColor);
-                graphics2D.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
-                graphics2D.dispose();
+                g2.setColor(fill);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                g2.dispose();
                 super.paintComponent(graphics);
             }
         };
@@ -76,25 +74,28 @@ public abstract class BasePanel extends JPanel {
         button.setOpaque(false);
         button.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(accentColor, 1, true),
-            new EmptyBorder(14, 28, 14, 28)
+            new EmptyBorder(16, 32, 16, 32)
         ));
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.setMaximumSize(new Dimension(460, 80));
+
+        int btnW = Math.min(500, (int)(Toolkit.getDefaultToolkit()
+                        .getScreenSize().width * 0.40));
+        button.setMaximumSize(new Dimension(btnW, 90));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titleLabel = new JLabel(titleText, SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        titleLabel.setFont(new Font("Consolas", Font.BOLD, 17));
         titleLabel.setForeground(accentColor);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitleLabel = new JLabel(subtitleText, SwingConstants.CENTER);
-        subtitleLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
+        subtitleLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
         subtitleLabel.setForeground(new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 180));
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         button.add(titleLabel);
-        button.add(Box.createVerticalStrut(4));
+        button.add(Box.createVerticalStrut(5));
         button.add(subtitleLabel);
         button.addActionListener(onClickAction);
         return button;

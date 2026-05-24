@@ -1,8 +1,5 @@
 package noescape;
 
-/**
- * OOP: Abstraction — specifies WHAT a room does, not HOW it does it.
- */
 public interface Escapable {
     String getName();
     String getRoomType();

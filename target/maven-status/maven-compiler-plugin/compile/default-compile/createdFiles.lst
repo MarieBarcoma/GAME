@@ -5,6 +5,7 @@ noescape/LoopPanel.class
 noescape/GameWindow.class
 noescape/BasePanel.class
 noescape/GameController.class
+noescape/CourseSelectPanel$1.class
 noescape/GameState.class
 noescape/SecurityOfficeRoom.class
 noescape/RoomPanel.class
@@ -27,3 +28,4 @@ noescape/Main$1.class
 noescape/Game.class
 noescape/GameDisplay.class
 noescape/TsgRoom.class
+noescape/CourseSelectPanel$2.class
