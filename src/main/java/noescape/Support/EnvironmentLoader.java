@@ -1,10 +1,16 @@
-package noescape;
+package noescape.Support;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import noescape.Interface.Escapable;
+import noescape.Rooms.Classroom;
+import noescape.Rooms.LibraryRoom;
+import noescape.Rooms.SecurityOfficeRoom;
+import noescape.Rooms.TsgRoom;
 
 public class EnvironmentLoader {
     private final Map<String, String> configValues = new HashMap<>();

@@ -1,4 +1,4 @@
-package noescape;
+package noescape.Core;
 
 import javax.swing.SwingUtilities;
 

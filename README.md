@@ -16,8 +16,11 @@ Interactive Fiction / Visual Novel
 * Clue/Inventory system
 * Multiple outcomes (win/loop)
 
-## 👥 Group Members
+## Class Diagram
 
+![No Escape Class Diagram](class-diagram/class_diagram.png)
+
+## 👥 Group Members
 * Shiella Marie L. Barcoma
 * Kent Vincent S. Donaire
 * Hadrian B. Esparcia

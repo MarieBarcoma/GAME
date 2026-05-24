@@ -1,4 +1,4 @@
-package noescape;
+package noescape.Panels;
 
 import javax.swing.*;
 import java.awt.*;

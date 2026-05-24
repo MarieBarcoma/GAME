@@ -1,4 +1,7 @@
-package noescape;
+package noescape.Base;
+
+import noescape.Interface.Escapable;
+import noescape.Support.Player;
 
 public abstract class BaseRoom implements Escapable {
     private final String name;

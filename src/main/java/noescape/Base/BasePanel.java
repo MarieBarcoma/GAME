@@ -1,7 +1,10 @@
-package noescape;
+package noescape.Base;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import noescape.Core.GameWindow;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

@@ -1,7 +1,17 @@
-package noescape;
+package noescape.Core;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import noescape.Interface.Escapable;
+import noescape.Panels.CourseSelectPanel;
+import noescape.Panels.LoopPanel;
+import noescape.Panels.NameEntryPanel;
+import noescape.Panels.ReadyPanel;
+import noescape.Panels.RoomPanel;
+import noescape.Panels.WinPanel;
+import noescape.Support.Player;
+
 import java.awt.*;
 import java.awt.event.*;
 

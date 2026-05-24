@@ -1,6 +1,11 @@
-package noescape;
+package noescape.Panels;
 
 import javax.swing.*;
+
+import noescape.Base.BasePanel;
+import noescape.Core.GameWindow;
+import noescape.Support.Player;
+
 import java.awt.*;
 
 public class ReadyPanel extends BasePanel {

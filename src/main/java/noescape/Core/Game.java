@@ -1,4 +1,12 @@
-package noescape;
+package noescape.Core;
+
+import noescape.Interface.Escapable;
+import noescape.Panels.SplashPanel;
+import noescape.Support.EnvironmentLoader;
+import noescape.Support.GameController;
+import noescape.Support.GameState;
+import noescape.Support.Player;
+import noescape.Support.TimerSystem;
 
 public class Game {
     private GameWindow gameWindow;

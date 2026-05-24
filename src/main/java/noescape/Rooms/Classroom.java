@@ -1,4 +1,6 @@
-package noescape;
+package noescape.Rooms;
+
+import noescape.Base.BaseRoom;
 
 public class Classroom extends BaseRoom {
     private static final int ATTEMPTS_REQUIRED_FOR_CLUE = 2;

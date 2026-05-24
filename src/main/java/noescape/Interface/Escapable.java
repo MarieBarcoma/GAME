@@ -1,4 +1,6 @@
-package noescape;
+package noescape.Interface;
+
+import noescape.Support.Player;
 
 public interface Escapable {
     String getName();

@@ -1,4 +1,6 @@
-package noescape;
+package noescape.Rooms;
+
+import noescape.Base.BaseRoom;
 
 public class SecurityOfficeRoom extends BaseRoom {
     private boolean hintPenaltyTriggered = false;

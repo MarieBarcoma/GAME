@@ -1,4 +1,4 @@
-package noescape;
+package noescape.Support;
 
 public class Player {
     private final String name;

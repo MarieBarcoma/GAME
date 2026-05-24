@@ -1,4 +1,6 @@
-package noescape;
+package noescape.Support;
+
+import noescape.Interface.Escapable;
 
 public class Location {
     private final String buildingName;

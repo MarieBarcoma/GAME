@@ -1,7 +1,13 @@
-package noescape;
+package noescape.Panels;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import noescape.Base.BasePanel;
+import noescape.Core.GameWindow;
+import noescape.Interface.Escapable;
+import noescape.Support.Player;
+
 import java.awt.*;
 
 public class RoomPanel extends BasePanel {

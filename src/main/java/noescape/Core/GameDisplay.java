@@ -1,6 +1,10 @@
-package noescape;
+package noescape.Core;
 
 import javax.swing.*;
+
+import noescape.Interface.Escapable;
+import noescape.Support.Player;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 

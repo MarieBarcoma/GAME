@@ -1,4 +1,6 @@
-package noescape;
+package noescape.Rooms;
+
+import noescape.Base.BaseRoom;
 
 public class LibraryRoom extends BaseRoom {
     public LibraryRoom(String name, boolean isLocked, String puzzleQuestion, String correctAnswer, String clueText, String hintText) {

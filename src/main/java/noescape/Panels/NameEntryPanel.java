@@ -1,7 +1,11 @@
-package noescape;
+package noescape.Panels;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import noescape.Base.BasePanel;
+import noescape.Core.GameWindow;
+
 import java.awt.*;
 
 public class NameEntryPanel extends BasePanel {
