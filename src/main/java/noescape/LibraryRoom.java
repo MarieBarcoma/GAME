@@ -12,7 +12,7 @@ public class LibraryRoom extends BaseRoom {
 
     @Override
     public void showHint() {
-        attemptCount++;   // ← costs 1 attempt — unique to LibraryRoom
+        attemptCount++; 
         lastMessage = "HINT (−1 attempt): " + hintText + "  [Attempt " + attemptCount + " consumed]";
     }
 

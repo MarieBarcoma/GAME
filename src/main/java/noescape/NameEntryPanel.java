@@ -67,8 +67,7 @@ public class NameEntryPanel extends BasePanel {
         promptLabel.setForeground(GameWindow.COLOR_YELLOW);
         promptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel hintLabel = new JLabel(
-                "Type your name in the field below and press  Submit.", SwingConstants.CENTER);
+        JLabel hintLabel = new JLabel("Type your name in the field below and press  Submit.", SwingConstants.CENTER);
         hintLabel.setFont(new Font("Calibri", Font.PLAIN, 15));
         hintLabel.setForeground(GameWindow.COLOR_DIMMED);
         hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

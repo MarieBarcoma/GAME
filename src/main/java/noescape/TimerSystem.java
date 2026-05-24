@@ -28,5 +28,7 @@ public class TimerSystem {
         return (int) Math.max(0, timeLimitSeconds - elapsedSeconds);
     }
 
-    public boolean isRunning() { return isRunning; }
+    public boolean isRunning() {
+        return isRunning; 
+    }
 }

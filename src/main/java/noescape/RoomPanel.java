@@ -108,7 +108,7 @@ public class RoomPanel extends BasePanel {
         int used = room.getAttempts();
         int max  = player.getMaxAttempts();
         attemptsLabel = new JLabel("Attempts used:  " + used + " / " + max, SwingConstants.CENTER);
-        attemptsLabel.setName("attemptsLabel");   // tag for GameWindow lookup
+        attemptsLabel.setName("attemptsLabel");
         attemptsLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         attemptsLabel.setForeground(
             used == 0 ? GameWindow.COLOR_GREEN
@@ -137,9 +137,9 @@ public class RoomPanel extends BasePanel {
             midContent.add(createHorizontalDivider());
             midContent.add(Box.createVerticalStrut(14));
             Color msgColor = controllerMessage.contains("Correct") ? GameWindow.COLOR_GREEN
-                           : controllerMessage.contains("CLUE") || controllerMessage.contains("HINT") ? GameWindow.COLOR_CYAN
-                           : controllerMessage.contains("locked") ? GameWindow.COLOR_RED
-                           : GameWindow.COLOR_ORANGE;
+                : controllerMessage.contains("CLUE") || controllerMessage.contains("HINT") ? GameWindow.COLOR_CYAN
+                : controllerMessage.contains("locked") ? GameWindow.COLOR_RED
+                : GameWindow.COLOR_ORANGE;
             for (String line : wrapTextToLines(controllerMessage, 70)) {
                 JLabel ml = new JLabel("[ " + line + " ]", SwingConstants.CENTER);
                 ml.setFont(new Font("Calibri", Font.ITALIC, 15));
@@ -164,7 +164,7 @@ public class RoomPanel extends BasePanel {
                 boolean locked = r.isLocked();
 
                 String icon = solved ? "✓ " : locked ? "🔒 " : active ? "▶ " : "○ ";
-                Color  col  = solved ? GameWindow.COLOR_GREEN : active ? GameWindow.COLOR_CYAN : locked ? GameWindow.COLOR_DIMMED : GameWindow.COLOR_TEXT;
+                Color col = solved ? GameWindow.COLOR_GREEN : active ? GameWindow.COLOR_CYAN : locked ? GameWindow.COLOR_DIMMED : GameWindow.COLOR_TEXT;
 
                 JLabel nav = new JLabel(icon + r.getName(), SwingConstants.CENTER);
                 nav.setFont(new Font("Consolas", Font.PLAIN, 13));

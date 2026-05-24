@@ -26,6 +26,7 @@ public class GameController {
     public String getMessage() { 
         return currentMessage; 
     }
+    
     public boolean isLoopOverridden() { 
         return isLoopOverridden; 
     }

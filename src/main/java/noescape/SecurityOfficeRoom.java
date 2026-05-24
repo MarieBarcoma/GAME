@@ -14,7 +14,7 @@ public class SecurityOfficeRoom extends BaseRoom {
 
     @Override
     public void showHint() {
-        hintPenaltyTriggered = true;   // triggers re-lock
+        hintPenaltyTriggered = true;
         unlock();
         lastMessage = "⚠ SECURITY ALERT! Hint request flagged. " + "Lockdown initiated — room re-locked!  " + "HINT: " + hintText;
     }

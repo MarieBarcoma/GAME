@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GameWindow extends JFrame {
-
     public static final Color COLOR_BACKGROUND_DARK = new Color(13, 13, 23);
     public static final Color COLOR_BACKGROUND_CARD = new Color(22, 22, 40);
     public static final Color COLOR_BACKGROUND_INPUT = new Color(18, 18, 32);
@@ -27,7 +26,6 @@ public class GameWindow extends JFrame {
     private JButton submitButton;
     private JButton clueButton;
     private JButton hintButton;
-
     private JLabel feedbackLabel;
     private JPanel feedbackRow;
 
@@ -210,7 +208,6 @@ public class GameWindow extends JFrame {
             return;
         }
 
-        // ── Update the attempt counter inside RoomPanel live ──
         if (contentCardPanel.getComponentCount() > 0) {
             java.awt.Component c = contentCardPanel.getComponent(0);
             if (c instanceof RoomPanel) {
@@ -218,13 +215,12 @@ public class GameWindow extends JFrame {
             }
         }
 
-        
         feedbackLabel.setText(message);
         feedbackLabel.setForeground(textColor);
 
-        int r = Math.min(255, 10 + textColor.getRed()   / 10);
+        int r = Math.min(255, 10 + textColor.getRed() / 10);
         int g = Math.min(255, 10 + textColor.getGreen() / 10);
-        int b = Math.min(255, 10 + textColor.getBlue()  / 10);
+        int b = Math.min(255, 10 + textColor.getBlue() / 10);
         feedbackRow.setBackground(new Color(r, g, b));
         feedbackRow.setVisible(true);
         feedbackRow.revalidate();

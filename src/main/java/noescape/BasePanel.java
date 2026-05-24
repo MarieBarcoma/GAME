@@ -79,8 +79,7 @@ public abstract class BasePanel extends JPanel {
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        int btnW = Math.min(500, (int)(Toolkit.getDefaultToolkit()
-                        .getScreenSize().width * 0.40));
+        int btnW = Math.min(500, (int)(Toolkit.getDefaultToolkit().getScreenSize().width * 0.40));
         button.setMaximumSize(new Dimension(btnW, 90));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 

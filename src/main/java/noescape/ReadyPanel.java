@@ -32,7 +32,7 @@ public class ReadyPanel extends BasePanel {
         inner.add(createHorizontalDivider());
         inner.add(Box.createVerticalStrut(22));
 
-        inner.add(createCenteredLabel("Player  :  " + player.getName(), GameWindow.COLOR_TEXT, 16, Font.PLAIN));
+        inner.add(createCenteredLabel("Player  : " + player.getName(), GameWindow.COLOR_TEXT, 16, Font.PLAIN));
         inner.add(Box.createVerticalStrut(8));
         inner.add(createCenteredLabel("Course  :  " + player.getCourse(), GameWindow.COLOR_CYAN, 16, Font.PLAIN));
         inner.add(Box.createVerticalStrut(8));

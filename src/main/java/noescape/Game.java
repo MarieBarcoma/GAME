@@ -180,7 +180,6 @@ public class Game {
         activeRoom.checkAnswer(playerInput);
 
         if (activeRoom.isSolved()) {
-            // ✅ Correct
             gameDisplay.showFeedback(
                 "✓  Correct!  " + activeRoom.getLastMessage(),
                 GameWindow.COLOR_GREEN
@@ -188,7 +187,6 @@ public class Game {
             onRoomSolved();
 
         } else {
-            // ✗ Wrong — show feedback with attempt count
             gameDisplay.showFeedback(
                 "✗  " + activeRoom.getLastMessage()
                 + "  (" + activeRoom.getAttempts() + "/" + currentPlayer.getMaxAttempts() + ")",

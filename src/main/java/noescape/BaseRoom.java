@@ -1,6 +1,5 @@
 package noescape;
 
-
 public abstract class BaseRoom implements Escapable {
     private final String name;
     private boolean isLocked;
@@ -9,7 +8,6 @@ public abstract class BaseRoom implements Escapable {
     protected final String correctAnswer;
     protected final String clueText;
     protected final String hintText;
-
     protected String lastMessage = "";
     protected boolean isSolved = false;
     protected int attemptCount = 0;

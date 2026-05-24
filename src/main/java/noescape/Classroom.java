@@ -1,7 +1,6 @@
 package noescape;
 
 public class Classroom extends BaseRoom {
-
     private static final int ATTEMPTS_REQUIRED_FOR_CLUE = 2;
 
     public Classroom(String name, boolean isLocked, String puzzleQuestion, String correctAnswer, String clueText, String hintText) {
