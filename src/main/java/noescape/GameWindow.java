@@ -27,6 +27,7 @@ public class GameWindow extends JFrame {
     private JButton submitButton;
     private JButton clueButton;
     private JButton hintButton;
+
     private JLabel feedbackLabel;
     private JPanel feedbackRow;
 
@@ -126,7 +127,7 @@ public class GameWindow extends JFrame {
     }
 
     private void swapContentPanel(JPanel newPanel) {
-        feedbackRow.setVisible(false);   // hide old feedback on every screen change
+        feedbackRow.setVisible(false);
         contentCardPanel.removeAll();
         contentCardPanel.add(newPanel, BorderLayout.CENTER);
         contentCardPanel.revalidate();
@@ -144,19 +145,20 @@ public class GameWindow extends JFrame {
 
     public void showChooseCourseScreen(String playerName, ActionListener onCS, ActionListener onNursing) {
         roomInfoLabel.setText("Choose Your Course");
+       
         submitButton.setVisible(false);
         clueButton.setVisible(false);
         hintButton.setVisible(false);
-        inputField.setEnabled(false);
+        inputField.setVisible(false);
         swapContentPanel(new CourseSelectPanel(playerName, onCS, onNursing));
     }
 
     public void showSplashScreen(Player player) {
         roomInfoLabel.setText("Ready to Play");
-        submitButton.setVisible(true);
+        submitButton.setVisible(false);
         clueButton.setVisible(false);
         hintButton.setVisible(false);
-        inputField.setEnabled(true);
+        inputField.setVisible(false);
         swapContentPanel(new ReadyPanel(player, inputField, submitButton));
     }
 
@@ -167,6 +169,7 @@ public class GameWindow extends JFrame {
         submitButton.setVisible(true);
         clueButton.setVisible(true);
         hintButton.setVisible(true);
+        inputField.setVisible(true);
         inputField.setEnabled(true);
         swapContentPanel(new RoomPanel(room, roomIndex, totalRooms, player, controllerMessage, allRooms, activeRoomIndex));
     }
@@ -176,10 +179,12 @@ public class GameWindow extends JFrame {
         submitButton.setVisible(false);
         clueButton.setVisible(false);
         hintButton.setVisible(false);
+        inputField.setVisible(false);
         swapContentPanel(new WinPanel(player, secondsRemaining, controllerMessage,
             e -> {
-                inputField.setText("restart");
+                inputField.setVisible(true);
                 submitButton.setVisible(true);
+                inputField.setText("restart");
                 submitButton.doClick();
             }));
     }
@@ -189,10 +194,12 @@ public class GameWindow extends JFrame {
         submitButton.setVisible(false);
         clueButton.setVisible(false);
         hintButton.setVisible(false);
+        inputField.setVisible(false);
         swapContentPanel(new LoopPanel(player, controllerMessage,
             e -> {
-                inputField.setText("restart");
+                inputField.setVisible(true);
                 submitButton.setVisible(true);
+                inputField.setText("restart");
                 submitButton.doClick();
             }));
     }
@@ -203,6 +210,7 @@ public class GameWindow extends JFrame {
             return;
         }
 
+        // ── Update the attempt counter inside RoomPanel live ──
         if (contentCardPanel.getComponentCount() > 0) {
             java.awt.Component c = contentCardPanel.getComponent(0);
             if (c instanceof RoomPanel) {
@@ -210,18 +218,19 @@ public class GameWindow extends JFrame {
             }
         }
 
+        
         feedbackLabel.setText(message);
         feedbackLabel.setForeground(textColor);
 
-        int r = Math.min(255, 10 + textColor.getRed() / 10);
+        int r = Math.min(255, 10 + textColor.getRed()   / 10);
         int g = Math.min(255, 10 + textColor.getGreen() / 10);
-        int b = Math.min(255, 10 + textColor.getBlue() / 10);
+        int b = Math.min(255, 10 + textColor.getBlue()  / 10);
         feedbackRow.setBackground(new Color(r, g, b));
         feedbackRow.setVisible(true);
         feedbackRow.revalidate();
         feedbackRow.repaint();
     }
-
+ 
     private JButton createFooterButton(String text, Color accent) {
         JButton btn = new JButton(text) {
             @Override
@@ -266,13 +275,11 @@ public class GameWindow extends JFrame {
         hintButton.setVisible(visible);
     }
 
-    public void setRoomInfoLabel(String text) { 
-        roomInfoLabel.setText(text); 
-    }
+    public void setRoomInfoLabel(String text) { roomInfoLabel.setText(text); }
 
     public JTextField getInputField() { return inputField; }
     public JLabel getTimerLabel() { return timerLabel; }
     public JButton getSubmitButton() { return submitButton; }
-    public JButton getClueButton() { return clueButton; }
+    public JButton getClueButton(){ return clueButton; }
     public JButton getHintButton() { return hintButton; }
 }
